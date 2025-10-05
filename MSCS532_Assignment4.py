@@ -82,3 +82,60 @@ if __name__ == "__main__":
     print("Original list:", unsorted_data)
     sorted_data = run_quick_sort(unsorted_data)
     print("Sorted list:", sorted_data)
+
+#Merge_Sort
+
+def run_merge_sort(data):
+
+    if len(data) <= 1:
+        return data  
+
+    # Splitting the list into two halves
+    middle = len(data) // 2
+    left_partition = data[:middle]
+    right_partition = data[middle:]
+
+    #Recursively sorting both halves
+    sorted_left = run_merge_sort(left_partition)
+    sorted_right = run_merge_sort(right_partition)
+
+    #Merging the sorted halves into one sorted list
+    return combine(sorted_left, sorted_right)
+
+
+def combine(left_list, right_list):
+    
+    result = []  # Final merged result
+    left_index = 0
+    right_index = 0
+
+    #Comparing elements from both lists and adding the smaller one
+    while left_index < len(left_list) and right_index < len(right_list):
+        if left_list[left_index] < right_list[right_index]:
+            result.append(left_list[left_index])
+            left_index += 1
+        else:
+            result.append(right_list[right_index])
+            right_index += 1
+
+    #Changing any remaining elements from left_list
+    while left_index < len(left_list):
+        result.append(left_list[left_index])
+        left_index += 1
+
+    #Changing any remaining elements from right_list
+    while right_index < len(right_list):
+        result.append(right_list[right_index])
+        right_index += 1
+
+    return result
+
+# ----------------------------
+# Main Execution Block
+# ----------------------------
+
+if __name__ == "__main__":
+    unsorted_list = [11, 3, 5, 73, 2, 17] 
+    print("Original list:", unsorted_list)
+    sorted_list = run_merge_sort(unsorted_list)
+    print("Sorted list:", sorted_list)
