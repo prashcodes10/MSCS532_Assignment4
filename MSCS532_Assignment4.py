@@ -139,3 +139,82 @@ if __name__ == "__main__":
     print("Original list:", unsorted_list)
     sorted_list = run_merge_sort(unsorted_list)
     print("Sorted list:", sorted_list)
+
+#Comparing and Plotting
+
+import time
+import random
+import matplotlib.pyplot as plt
+
+# -----------------------------------------
+# Importing the sorting algorithms
+# -----------------------------------------
+
+from heap import heap_sort
+from quicksort import run_quick_sort
+from mergesort import run_merge_sort
+
+
+def generate_input(size, distribution):
+   
+    if distribution == 'sorted':
+        return list(range(size))
+    elif distribution == 'reverse':
+        return list(range(size, 0, -1))
+    elif distribution == 'random':
+        lst = list(range(size))
+        random.shuffle(lst)
+        return lst
+    else:
+        raise ValueError("Unknown distribution type")
+
+
+def time_sorting_algorithm(sort_func, data):
+   
+    start_time = time.perf_counter()
+    sort_func(data.copy()) 
+    end_time = time.perf_counter()
+    return end_time - start_time
+
+
+def run_benchmarks():
+    sizes = [1000, 5000, 10000]  # Different input sizes to test
+    distributions = ['sorted', 'reverse', 'random']
+    sorting_algorithms = {
+        'Heap Sort': heap_sort,
+        'Merge Sort': run_merge_sort,
+        'Quick Sort': run_quick_sort
+    }
+
+    
+    results = {dist: {name: [] for name in sorting_algorithms} for dist in distributions}
+
+    for dist in distributions:
+        for size in sizes:
+            data = generate_input(size, dist)
+            for name, func in sorting_algorithms.items():
+                elapsed = time_sorting_algorithm(func, data)
+                results[dist][name].append(elapsed)
+                print(f"Size {size}, {dist.capitalize()}, {name}: {elapsed:.6f} sec")
+
+    return sizes, results
+
+
+def plot_results(sizes, results):
+  
+    for dist, algorithms in results.items():
+        plt.figure(figsize=(8, 5))
+        for name, times in algorithms.items():
+            plt.plot(sizes, times, marker='o', label=name)
+        plt.title(f"Sorting Time vs Input Size ({dist.capitalize()} Data)")
+        plt.xlabel("Input Size")
+        plt.ylabel("Time (seconds)")
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+
+
+if __name__ == "__main__":
+    sizes, benchmark_results = run_benchmarks()
+    plot_results(sizes, benchmark_results)
