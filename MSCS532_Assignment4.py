@@ -48,3 +48,37 @@ if __name__ == "__main__":
     print("Original list:", numbers)
     sorted_numbers = heap_sort(numbers)
     print("Sorted list:", sorted_numbers)
+
+#Quick_Sort
+
+def run_quick_sort(data):
+
+    if len(data) <= 1:
+        return data  
+
+    # Choosing the pivot element, here 1st
+    pivot = data[len(data)//2] #uses middle element as pivot
+    left_partition = []
+    right_partition = []
+    equal_elements = []
+
+    # Partitioning the data into three parts
+    for element in data:
+        if element < pivot:
+            left_partition.append(element)
+        elif element > pivot:
+            right_partition.append(element)
+        else:
+            equal_elements.append(element)
+
+    # Step 3: Recursively sorting left and right partitions, then combining them all
+    sorted_left = run_quick_sort(left_partition)
+    sorted_right = run_quick_sort(right_partition)
+
+    return sorted_left + equal_elements + sorted_right
+
+if __name__ == "__main__":
+    unsorted_data = [11, 3, 5, 73, 2, 17] 
+    print("Original list:", unsorted_data)
+    sorted_data = run_quick_sort(unsorted_data)
+    print("Sorted list:", sorted_data)
